@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt->execute([$login, $email, $phone, password_hash($password, PASSWORD_DEFAULT), $birthDate, $roleId]);
             set_flash('success', 'Регистрация успешна, войдите в аккаунт.');
-            header('Location: /login.php');
+            redirect_to('login.php');
             exit;
         } catch (PDOException $e) {
             $errors[] = 'Пользователь с такими данными уже существует.';

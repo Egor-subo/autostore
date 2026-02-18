@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($user && password_verify($password, $user['password_hash'])) {
             $_SESSION['user_id'] = $user['id'];
-            header('Location: /index.php');
+            redirect_to('index.php');
             exit;
         }
         $errors[] = 'Неверные данные для входа.';

@@ -28,3 +28,13 @@
 ```sql
 UPDATE users SET role_id = (SELECT id FROM roles WHERE name='admin') WHERE login='your_login';
 ```
+
+
+## Запуск в Apache (XAMPP/WAMP)
+Если открываете проект через `http://localhost/...` и видите `Not Found`:
+- Либо настройте VirtualHost так, чтобы `DocumentRoot` указывал на папку `public`.
+- Либо оставьте как есть: в проект добавлены файлы-обертки в корне (`index.php`, `login.php`, `admin/*.php`) и копия `assets/`, поэтому приложение откроется и без перенастройки DocumentRoot.
+
+Пример локального URL:
+- `http://localhost/<папка-проекта>/index.php`
+- `http://localhost/<папка-проекта>/setup.php`

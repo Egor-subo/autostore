@@ -10,7 +10,7 @@ $appHealth = app_health_check();
 if (!$appHealth['ok']) {
     $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
     if ($currentScript !== 'setup.php') {
-        header('Location: /setup.php');
+        redirect_to('setup.php');
         exit;
     }
 }

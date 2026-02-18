@@ -15,7 +15,7 @@ include __DIR__ . '/../includes/header.php';
 <h2>Настройка AutoStore</h2>
 
 <?php if ($status['ok']): ?>
-    <div class="alert alert-success">База данных настроена корректно. Можно перейти на <a href="/index.php">главную страницу</a>.</div>
+    <div class="alert alert-success">База данных настроена корректно. Можно перейти на <a href="<?= e(url('index.php')) ?>">главную страницу</a>.</div>
 <?php else: ?>
     <div class="alert alert-warning mb-3"><?= e($status['message']) ?></div>
 <?php endif; ?>

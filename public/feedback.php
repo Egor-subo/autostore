@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         $q->execute([current_user()['id'] ?? null, $name, $email, $message]);
         set_flash('success', 'Спасибо! Ваше сообщение отправлено.');
     }
-    header('Location: /feedback.php'); exit;
+    redirect_to('feedback.php');
 }
 include __DIR__ . '/../includes/header.php';
 ?>

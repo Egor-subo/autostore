@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && is_logged_in()) {
         $q = db()->prepare('INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)');
         $q->execute([current_user()['id'], $id, $qty]);
         set_flash('success', 'Товар добавлен в корзину.');
-        header('Location: /cart.php');
+        redirect_to('cart.php');
         exit;
     }
     if (isset($_POST['add_review'])) {
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && is_logged_in()) {
             $q = db()->prepare('INSERT INTO reviews (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?)');
             $q->execute([current_user()['id'], $id, $rating, $comment]);
         }
-        header('Location: /product.php?id=' . $id);
+        redirect_to('product.php?id=' . $id);
         exit;
     }
 }
@@ -35,7 +35,7 @@ include __DIR__ . '/../includes/header.php';
 <div class="row g-4">
   <div class="col-md-6"><img class="img-fluid rounded" src="<?= e($product['image_url'] ?: 'https://via.placeholder.com/800x500') ?>"></div>
   <div class="col-md-6"><h2><?= e($product['title']) ?></h2><p class="text-muted"><?= e($product['category_name']) ?></p><p><?= e($product['description']) ?></p><div class="price mb-3"><?= number_format((float)$product['price'], 0, ',', ' ') ?> ₽</div>
-  <?php if(is_logged_in()): ?><form method="post" class="d-flex gap-2"><input type="number" name="quantity" min="1" value="1" class="form-control" style="max-width:100px"><button name="add_to_cart" class="btn btn-primary">В корзину</button></form><?php else: ?><a href="/login.php" class="btn btn-outline-primary">Войдите для заказа</a><?php endif; ?>
+  <?php if(is_logged_in()): ?><form method="post" class="d-flex gap-2"><input type="number" name="quantity" min="1" value="1" class="form-control" style="max-width:100px"><button name="add_to_cart" class="btn btn-primary">В корзину</button></form><?php else: ?><a href="<?= e(url('login.php')) ?>" class="btn btn-outline-primary">Войдите для заказа</a><?php endif; ?>
   </div>
 </div>
 <hr>

@@ -38,7 +38,7 @@ function is_admin(): bool
 function require_auth(): void
 {
     if (!is_logged_in()) {
-        header('Location: /login.php');
+        redirect_to('login.php');
         exit;
     }
 }

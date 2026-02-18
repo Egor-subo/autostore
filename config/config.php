@@ -11,5 +11,7 @@ return [
     'app' => [
         'name' => 'AutoStore',
         'min_age' => 14,
+        // Например: '/autostore-codex-develop-car-shop-web-application-in-php'
+        'base_url' => '',
     ],
 ];

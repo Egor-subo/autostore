@@ -3,7 +3,7 @@ require __DIR__ . '/../bootstrap.php'; require_admin();
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     if (isset($_POST['reply'])) db()->prepare('UPDATE reviews SET admin_reply=? WHERE id=?')->execute([trim($_POST['admin_reply']), (int)$_POST['id']]);
     if (isset($_POST['delete'])) db()->prepare('DELETE FROM reviews WHERE id=?')->execute([(int)$_POST['id']]);
-    header('Location: /admin/reviews.php'); exit;
+    redirect_to('admin/reviews.php');
 }
 $reviews=db()->query('SELECT r.*,u.login,p.title FROM reviews r JOIN users u ON u.id=r.user_id JOIN products p ON p.id=r.product_id ORDER BY r.id DESC')->fetchAll();
 include __DIR__ . '/../../includes/header.php';

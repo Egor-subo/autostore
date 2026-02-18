@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     $q = db()->prepare('UPDATE users SET email=?, phone=? WHERE id=?');
     $q->execute([$email, $phone, $user['id']]);
     set_flash('success', 'Профиль обновлен.');
-    header('Location: /profile.php'); exit;
+    redirect_to('profile.php');
 }
 include __DIR__ . '/../includes/header.php';
 ?>

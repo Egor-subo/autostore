@@ -2,7 +2,7 @@
 require __DIR__ . '/../bootstrap.php'; require_admin();
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     db()->prepare('UPDATE orders SET status_id=? WHERE id=?')->execute([(int)$_POST['status_id'], (int)$_POST['id']]);
-    header('Location: /admin/orders.php'); exit;
+    redirect_to('admin/orders.php');
 }
 $statuses=db()->query('SELECT * FROM order_statuses')->fetchAll();
 $orders=db()->query('SELECT o.*,u.login,s.name status_name FROM orders o JOIN users u ON u.id=o.user_id JOIN order_statuses s ON s.id=o.status_id ORDER BY o.id DESC')->fetchAll();

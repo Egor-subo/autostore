@@ -31,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db()->prepare('DELETE FROM cart_items WHERE user_id=?')->execute([$userId]);
             db()->commit();
         }
-        header('Location: /orders.php'); exit;
+        redirect_to('orders.php');
     }
-    header('Location: /cart.php'); exit;
+    redirect_to('cart.php');
 }
 
 $items = db()->prepare('SELECT ci.id, ci.quantity, p.title, p.price FROM cart_items ci JOIN products p ON p.id=ci.product_id WHERE ci.user_id=?');
