@@ -33,7 +33,26 @@ function detect_base_url(): string
         return '';
     }
 
-    return rtrim($dir, '/');
+    $segments = array_values(array_filter(explode('/', trim($dir, '/')), 'strlen'));
+
+    // Support typical deployments:
+    // - /project/public/index.php
+    // - /project/public/admin/index.php
+    // - /project/admin/index.php (wrapper files in project root)
+    while (!empty($segments)) {
+        $last = end($segments);
+        if ($last === 'public' || $last === 'admin') {
+            array_pop($segments);
+            continue;
+        }
+        break;
+    }
+
+    if (empty($segments)) {
+        return '';
+    }
+
+    return '/' . implode('/', $segments);
 }
 
 function base_url(): string
