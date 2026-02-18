@@ -21,6 +21,21 @@ function set_flash(string $key, string $msg): void
     $_SESSION['flash'][$key] = $msg;
 }
 
+function detect_base_url(): string
+{
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    if ($scriptName === '') {
+        return '';
+    }
+
+    $dir = str_replace('\\', '/', dirname($scriptName));
+    if ($dir === '/' || $dir === '.') {
+        return '';
+    }
+
+    return rtrim($dir, '/');
+}
+
 function base_url(): string
 {
     static $base = null;
@@ -30,12 +45,12 @@ function base_url(): string
 
     $config = require __DIR__ . '/../config/config.php';
     $raw = trim((string)($config['app']['base_url'] ?? ''));
-    if ($raw === '' || $raw === '/') {
-        $base = '';
+    if ($raw !== '' && $raw !== '/') {
+        $base = '/' . trim($raw, '/');
         return $base;
     }
 
-    $base = '/' . trim($raw, '/');
+    $base = detect_base_url();
     return $base;
 }
 
@@ -43,6 +58,7 @@ function url(string $path = ''): string
 {
     $path = ltrim($path, '/');
     $base = base_url();
+
     if ($path === '') {
         return $base !== '' ? $base . '/' : '/';
     }
