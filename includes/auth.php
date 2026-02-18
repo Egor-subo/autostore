@@ -13,9 +13,13 @@ function current_user(): ?array
         return $user;
     }
 
-    $stmt = db()->prepare('SELECT u.*, r.name as role_name FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = ?');
-    $stmt->execute([$_SESSION['user_id']]);
-    $user = $stmt->fetch() ?: null;
+    try {
+        $stmt = db()->prepare('SELECT u.*, r.name as role_name FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = ?');
+        $stmt->execute([$_SESSION['user_id']]);
+        $user = $stmt->fetch() ?: null;
+    } catch (PDOException $e) {
+        return null;
+    }
 
     return $user;
 }
