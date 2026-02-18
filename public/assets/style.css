@@ -1,5 +1,81 @@
-body { background: #f5f7fb; }
-.hero { background: linear-gradient(120deg,#0d6efd,#6610f2); color:#fff; border-radius: 1rem; padding: 2rem; }
-.card-img-top { height: 180px; object-fit: cover; }
-.price { font-size: 1.2rem; font-weight: 700; }
-.rating { color: #f59f00; }
+:root {
+  --brand-1: #4f46e5;
+  --brand-2: #06b6d4;
+  --bg-soft: #f4f7ff;
+}
+
+body {
+  background: linear-gradient(180deg, #f8faff 0%, #eef3ff 100%);
+  color: #1f2937;
+}
+
+.hero {
+  background: linear-gradient(130deg, var(--brand-1), var(--brand-2));
+  color: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 15px 40px rgba(79, 70, 229, 0.2);
+}
+
+.glass-card,
+.card {
+  border: 0;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.rating {
+  color: #f59f00;
+}
+
+.auth-wrap {
+  min-height: 72vh;
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  max-width: 960px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.auth-side {
+  background: linear-gradient(145deg, var(--brand-1), #7c3aed);
+  color: #fff;
+  padding: 2.2rem;
+}
+
+.auth-side h3 {
+  font-weight: 700;
+}
+
+.auth-form {
+  background: #fff;
+  padding: 2.2rem;
+}
+
+.page-section {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  padding: 1.25rem;
+}
+
+.badge-soft {
+  background: #e0e7ff;
+  color: #3730a3;
+}

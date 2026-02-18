@@ -20,6 +20,13 @@ CREATE TABLE users (
   FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
+
+
+INSERT INTO users (login, email, phone, password_hash, birth_date, role_id) VALUES
+('Admin', 'admil@car.ru', '+7900 777 77 77', '$2y$12$p4s1sp9yvW/8tQVobltAV.YYFKk6ulyP3X3/5ZLv/faZ91Mv1./.C', '2006-09-27', (SELECT id FROM roles WHERE name='admin')),
+('ivan_user', 'ivan@example.com', '+7900 111 11 11', '$2y$12$Nkd7PRNWy0eeGm766RrVzuz3JHkWUQgVF.LhaJ7zHZ8bSIUMQJEua', '2004-05-14', (SELECT id FROM roles WHERE name='user')),
+('olga_user', 'olga@example.com', '+7900 222 22 22', '$2y$12$yaAn0TDqQKQTMZ8uigft4exGOKDF2EDNJHvLDhHpMjI6uSPNjxosy', '2003-11-03', (SELECT id FROM roles WHERE name='user'));
+
 CREATE TABLE categories (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL UNIQUE,

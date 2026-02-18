@@ -39,3 +39,10 @@ UPDATE users SET role_id = (SELECT id FROM roles WHERE name='admin') WHERE login
 Пример локального URL:
 - `http://localhost/<папка-проекта>/index.php`
 - `http://localhost/<папка-проекта>/setup.php`
+
+
+## Тестовые аккаунты
+После импорта `sql/schema.sql` будут созданы пользователи:
+- **Администратор**: логин `Admin`, пароль `admin0890`, email `admil@car.ru`, телефон `+7900 777 77 77`, дата рождения `2006-09-27`.
+- **Пользователь**: логин `ivan_user`, пароль `user12345`.
+- **Пользователь**: логин `olga_user`, пароль `user67890`.

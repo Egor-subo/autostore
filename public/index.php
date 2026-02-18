@@ -8,7 +8,7 @@ include __DIR__ . '/../includes/header.php';
     <p>Выбирайте автомобили, детали, оформляйте заказы, оставляйте отзывы и получайте обратную связь.</p>
     <a href="<?= e(url('catalog.php')) ?>" class="btn btn-light">Перейти в каталог</a>
 </section>
-<div class="row g-3">
+<div class="page-section mb-3"><h3 class="mb-3">Популярные предложения</h3><div class="row g-3">
     <?php foreach ($products as $product): ?>
         <div class="col-md-4">
             <div class="card h-100 shadow-sm">
@@ -23,4 +23,5 @@ include __DIR__ . '/../includes/header.php';
         </div>
     <?php endforeach; ?>
 </div>
+</div></div>
 <?php include __DIR__ . '/../includes/footer.php'; ?>

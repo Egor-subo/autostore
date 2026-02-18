@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$login, $email, $phone, password_hash($password, PASSWORD_DEFAULT), $birthDate, $roleId]);
             set_flash('success', 'Регистрация успешна, войдите в аккаунт.');
             redirect_to('login.php');
-            exit;
         } catch (PDOException $e) {
             $errors[] = 'Пользователь с такими данными уже существует.';
         }
@@ -38,15 +37,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 include __DIR__ . '/../includes/header.php';
 ?>
-<h2>Регистрация</h2>
-<?php foreach ($errors as $e): ?><div class="alert alert-danger"><?= e($e) ?></div><?php endforeach; ?>
-<form method="post" class="row g-3">
-    <div class="col-md-6"><label class="form-label">Логин</label><input name="login" class="form-control" required></div>
-    <div class="col-md-6"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required></div>
-    <div class="col-md-6"><label class="form-label">Телефон</label><input name="phone" class="form-control" placeholder="+7..." required></div>
-    <div class="col-md-6"><label class="form-label">Дата рождения</label><input type="date" name="birth_date" max="<?= date('Y-m-d') ?>" class="form-control" required></div>
-    <div class="col-md-6"><label class="form-label">Пароль</label><input type="password" name="password" class="form-control" minlength="6" required></div>
-    <div class="col-md-6"><label class="form-label">Капча: <?= e(captcha_question()) ?></label><input name="captcha" class="form-control" required></div>
-    <div class="col-12"><button class="btn btn-primary">Зарегистрироваться</button></div>
-</form>
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <div class="row g-0">
+      <div class="col-md-5 auth-side d-flex flex-column justify-content-center">
+        <span class="badge badge-soft mb-3">New AutoStore User</span>
+        <h3>Создайте аккаунт</h3>
+        <p class="mb-0">После регистрации вы сможете добавлять товары в корзину, оформлять заказы и отслеживать их статус.</p>
+      </div>
+      <div class="col-md-7 auth-form">
+        <h2 class="mb-3">Регистрация</h2>
+        <?php foreach ($errors as $e): ?><div class="alert alert-danger"><?= e($e) ?></div><?php endforeach; ?>
+        <form method="post" class="row g-3">
+            <div class="col-md-6"><label class="form-label">Логин</label><input name="login" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label">Телефон</label><input name="phone" class="form-control" placeholder="+7..." required></div>
+            <div class="col-md-6"><label class="form-label">Дата рождения</label><input type="date" name="birth_date" max="<?= date('Y-m-d') ?>" class="form-control" required></div>
+            <div class="col-md-6"><label class="form-label">Пароль</label><input type="password" name="password" class="form-control" minlength="6" required></div>
+            <div class="col-md-6"><label class="form-label">Капча: <?= e(captcha_question()) ?></label><input name="captcha" class="form-control" required></div>
+            <div class="col-12 d-grid"><button class="btn btn-primary btn-lg">Зарегистрироваться</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include __DIR__ . '/../includes/footer.php'; ?>
