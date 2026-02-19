@@ -29,9 +29,6 @@
                     <li class="nav-item"><a class="nav-link text-warning" href="<?= e(url('admin/index.php')) ?>">Админка</a></li>
                 <?php endif; ?>
             </ul>
-            <form class="d-flex me-2" action="<?= e(url('catalog.php')) ?>" method="get">
-                <input class="form-control form-control-sm" name="q" placeholder="Поиск по сайту">
-            </form>
             <div class="d-flex gap-2">
                 <?php if (!$user): ?>
                     <a class="btn btn-outline-light btn-sm" href="<?= e(url('login.php')) ?>">Вход</a>

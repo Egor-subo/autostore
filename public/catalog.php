@@ -1,7 +1,18 @@
 <?php
 require __DIR__ . '/bootstrap.php';
 
+$scriptName = basename($_SERVER['SCRIPT_NAME'] ?? '');
+$isCarsPage = $scriptName === 'cars.php';
+$isPartsPage = $scriptName === 'parts.php';
+$isTypedPage = $isCarsPage || $isPartsPage;
+
 $type = $_GET['type'] ?? '';
+if ($isCarsPage) {
+    $type = 'car';
+} elseif ($isPartsPage) {
+    $type = 'part';
+}
+
 $allowedTypes = ['car', 'part'];
 if (!in_array($type, $allowedTypes, true)) {
     $type = '';
@@ -70,13 +81,13 @@ $stmt->execute($params);
 $products = $stmt->fetchAll();
 
 $pageTitle = 'Каталог товаров';
-$pageDescription = 'Ищите автомобили и комплектующие по категории, цене и названию.';
+$pageDescription = 'Ищите автомобили и комплектующие по категории и цене.';
 if ($type === 'car') {
     $pageTitle = 'Автомобили';
-    $pageDescription = 'Каталог автомобилей с фильтрацией по категориям и цене.';
+    $pageDescription = 'Каталог автомобилей с фильтрацией по категориям, цене и поиском.';
 } elseif ($type === 'part') {
     $pageTitle = 'Комплектующие';
-    $pageDescription = 'Каталог комплектующих с удобным поиском и фильтрацией по цене.';
+    $pageDescription = 'Каталог комплектующих с фильтрацией по категориям, цене и поиском.';
 }
 
 include __DIR__ . '/../includes/header.php';
@@ -88,13 +99,21 @@ include __DIR__ . '/../includes/header.php';
 
 <div class="page-section mb-3">
     <form class="row g-2">
-        <div class="col-md-3">
-            <select name="type" class="form-select">
-                <option value="">Все типы</option>
-                <option value="car" <?= $type === 'car' ? 'selected' : '' ?>>Автомобили</option>
-                <option value="part" <?= $type === 'part' ? 'selected' : '' ?>>Комплектующие</option>
-            </select>
-        </div>
+        <?php if ($isTypedPage): ?>
+            <input type="hidden" name="type" value="<?= e($type) ?>">
+            <div class="col-md-3">
+                <input class="form-control" value="<?= $type === 'car' ? 'Автомобили' : 'Комплектующие' ?>" disabled>
+            </div>
+        <?php else: ?>
+            <div class="col-md-3">
+                <select name="type" class="form-select">
+                    <option value="">Все типы</option>
+                    <option value="car" <?= $type === 'car' ? 'selected' : '' ?>>Автомобили</option>
+                    <option value="part" <?= $type === 'part' ? 'selected' : '' ?>>Комплектующие</option>
+                </select>
+            </div>
+        <?php endif; ?>
+
         <div class="col-md-3">
             <select name="category" class="form-select">
                 <option value="0">Все категории</option>
@@ -106,13 +125,15 @@ include __DIR__ . '/../includes/header.php';
         <div class="col-md-2"><input type="number" min="0" step="1" name="price_min" class="form-control" placeholder="Цена от" value="<?= e((string)($_GET['price_min'] ?? '')) ?>"></div>
         <div class="col-md-2"><input type="number" min="0" step="1" name="price_max" class="form-control" placeholder="Цена до" value="<?= e((string)($_GET['price_max'] ?? '')) ?>"></div>
         <div class="col-md-2"><button class="btn btn-primary w-100">Фильтр</button></div>
-        <div class="col-12"><input name="q" class="form-control" placeholder="Поиск по названию и описанию" value="<?= e($search) ?>"></div>
+        <?php if ($isTypedPage): ?>
+            <div class="col-12"><input name="q" class="form-control" placeholder="Поиск по названию и описанию" value="<?= e($search) ?>"></div>
+        <?php endif; ?>
     </form>
 </div>
 
 <div class="row g-3">
     <?php foreach ($products as $product): ?>
-        <div class="col-md-4"><div class="card h-100"><img src="<?= e($product['image_url'] ?: 'https://via.placeholder.com/800x500') ?>" class="card-img-top"><div class="card-body d-flex flex-column"><small class="text-muted"><?= e($product['category_name']) ?></small><h5><?= e($product['title']) ?></h5><p><?= e($product['short_description']) ?></p><div class="price mb-2"><?= number_format((float)$product['price'], 0, ',', ' ') ?> ₽</div><a class="btn btn-outline-primary mt-auto" href="<?= e(url('product.php?id=' . (int)$product['id'])) ?>">Подробнее</a></div></div></div>
+        <div class="col-md-4"><div class="card h-100 product-card"><img src="<?= e($product['image_url'] ?: 'https://via.placeholder.com/800x500') ?>" class="card-img-top"><div class="card-body d-flex flex-column"><small class="text-muted"><?= e($product['category_name']) ?></small><h5><?= e($product['title']) ?></h5><p><?= e($product['short_description']) ?></p><div class="price mb-2"><?= number_format((float)$product['price'], 0, ',', ' ') ?> ₽</div><a class="btn btn-outline-primary mt-auto" href="<?= e(url('product.php?id=' . (int)$product['id'])) ?>">Подробнее</a></div></div></div>
     <?php endforeach; ?>
     <?php if (!$products): ?>
         <div class="col-12"><div class="alert alert-light border">По вашему запросу ничего не найдено.</div></div>
