@@ -22,6 +22,7 @@ $category = (int)($_GET['category'] ?? 0);
 $priceMin = isset($_GET['price_min']) ? (float)$_GET['price_min'] : null;
 $priceMax = isset($_GET['price_max']) ? (float)$_GET['price_max'] : null;
 $search = trim((string)($_GET['q'] ?? ''));
+$search = preg_replace('/\s+/u', ' ', $search) ?? '';
 
 $categorySql = 'SELECT * FROM categories';
 $categoryParams = [];
@@ -68,8 +69,9 @@ if ($priceMax !== null) {
     $params[] = $priceMax;
 }
 if ($search !== '') {
-    $sql .= ' AND (p.title LIKE ? OR p.short_description LIKE ? OR p.description LIKE ?)';
+    $sql .= ' AND (LOWER(p.title) LIKE LOWER(?) OR LOWER(p.short_description) LIKE LOWER(?) OR LOWER(p.description) LIKE LOWER(?) OR LOWER(c.name) LIKE LOWER(?))';
     $like = '%' . $search . '%';
+    $params[] = $like;
     $params[] = $like;
     $params[] = $like;
     $params[] = $like;
@@ -98,7 +100,7 @@ include __DIR__ . '/../includes/header.php';
 </div>
 
 <div class="page-section mb-3">
-    <form class="row g-2">
+    <form method="get" class="row g-2">
         <?php if ($isTypedPage): ?>
             <input type="hidden" name="type" value="<?= e($type) ?>">
             <div class="col-md-3">

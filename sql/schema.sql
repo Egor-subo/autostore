@@ -104,6 +104,7 @@ CREATE TABLE feedback_messages (
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL,
   message TEXT NOT NULL,
+  admin_reply TEXT DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );

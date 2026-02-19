@@ -19,7 +19,7 @@
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('cars.php')) ?>">Автомобили</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('parts.php')) ?>">Комплектующие</a></li>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('about.php')) ?>">О нас</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= e(url('feedback.php')) ?>">Обратная связь</a></li>
+                <?php if ($user): ?><li class="nav-item"><a class="nav-link" href="<?= e(url('feedback.php')) ?>">Обратная связь</a></li><?php endif; ?>
                 <?php if ($user): ?>
                     <li class="nav-item"><a class="nav-link" href="<?= e(url('cart.php')) ?>">Корзина</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= e(url('orders.php')) ?>">Мои заказы</a></li>
