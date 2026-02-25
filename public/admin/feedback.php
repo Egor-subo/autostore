@@ -7,20 +7,28 @@ if (!in_array($filter, ['all', 'pending', 'answered'], true)) {
     $filter = 'all';
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reply'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int)($_POST['id'] ?? 0);
-    $reply = trim((string)($_POST['admin_reply'] ?? ''));
 
-    $stmt = db()->prepare('UPDATE feedback_messages SET admin_reply=? WHERE id=?');
-    $stmt->execute([$reply !== '' ? $reply : null, $id]);
-    set_flash('success', 'Ответ сохранён.');
+    if (isset($_POST['reply'])) {
+        $reply = trim((string)($_POST['admin_reply'] ?? ''));
+        $stmt = db()->prepare('UPDATE feedback_messages SET admin_reply=? WHERE id=?');
+        $stmt->execute([$reply !== '' ? $reply : null, $id]);
+        set_flash('success', 'Ответ сохранён.');
+    }
+
+    if (isset($_POST['delete'])) {
+        $stmt = db()->prepare('DELETE FROM feedback_messages WHERE id=?');
+        $stmt->execute([$id]);
+        set_flash('success', 'Обращение удалено.');
+    }
+
     redirect_to('admin/feedback.php?status=' . $filter);
 }
 
 $sql = 'SELECT fm.*, u.login AS user_login, u.phone AS user_phone
         FROM feedback_messages fm
         LEFT JOIN users u ON u.id = fm.user_id';
-$params = [];
 if ($filter === 'pending') {
     $sql .= ' WHERE fm.admin_reply IS NULL OR fm.admin_reply = ""';
 } elseif ($filter === 'answered') {
@@ -29,7 +37,7 @@ if ($filter === 'pending') {
 $sql .= ' ORDER BY (fm.admin_reply IS NULL OR fm.admin_reply = "") DESC, fm.id DESC';
 
 $stmt = db()->prepare($sql);
-$stmt->execute($params);
+$stmt->execute();
 $rows = $stmt->fetchAll();
 
 include __DIR__ . '/../../includes/header.php';
@@ -83,8 +91,9 @@ include __DIR__ . '/../../includes/header.php';
                     <label class="form-label">Ответ администратора</label>
                     <textarea name="admin_reply" class="form-control" rows="3" placeholder="Введите ответ пользователю..."><?= e((string)($r['admin_reply'] ?? '')) ?></textarea>
                 </div>
-                <div class="col-12">
+                <div class="col-12 d-flex gap-2">
                     <button name="reply" class="btn btn-primary">Сохранить ответ</button>
+                    <button name="delete" class="btn btn-outline-danger" data-confirm="Удалить это обращение?">Удалить обращение</button>
                 </div>
             </form>
         </div>
