@@ -19,8 +19,10 @@ if (!in_array($type, $allowedTypes, true)) {
 }
 
 $category = (int)($_GET['category'] ?? 0);
-$priceMin = isset($_GET['price_min']) ? (float)$_GET['price_min'] : null;
-$priceMax = isset($_GET['price_max']) ? (float)$_GET['price_max'] : null;
+$priceMinRaw = trim((string)($_GET['price_min'] ?? ''));
+$priceMaxRaw = trim((string)($_GET['price_max'] ?? ''));
+$priceMin = $priceMinRaw !== '' ? (float)$priceMinRaw : null;
+$priceMax = $priceMaxRaw !== '' ? (float)$priceMaxRaw : null;
 $search = trim((string)($_GET['q'] ?? ''));
 $search = preg_replace('/\s+/u', ' ', $search) ?? '';
 
@@ -124,8 +126,8 @@ include __DIR__ . '/../includes/header.php';
                 <?php endforeach; ?>
             </select>
         </div>
-        <div class="col-md-2"><input type="number" min="0" step="1" name="price_min" class="form-control" placeholder="Цена от" value="<?= e((string)($_GET['price_min'] ?? '')) ?>"></div>
-        <div class="col-md-2"><input type="number" min="0" step="1" name="price_max" class="form-control" placeholder="Цена до" value="<?= e((string)($_GET['price_max'] ?? '')) ?>"></div>
+        <div class="col-md-2"><input type="number" min="0" step="1" name="price_min" class="form-control" placeholder="Цена от" value="<?= e($priceMinRaw) ?>"></div>
+        <div class="col-md-2"><input type="number" min="0" step="1" name="price_max" class="form-control" placeholder="Цена до" value="<?= e($priceMaxRaw) ?>"></div>
         <div class="col-md-2"><button class="btn btn-primary w-100">Фильтр</button></div>
         <?php if ($isTypedPage): ?>
             <div class="col-12"><input name="q" class="form-control" placeholder="Поиск по названию и описанию" value="<?= e($search) ?>"></div>

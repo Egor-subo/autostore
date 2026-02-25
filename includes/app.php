@@ -2,6 +2,16 @@
 
 require_once __DIR__ . '/db.php';
 
+function ensure_optional_columns(PDO $pdo, string $schema): void
+{
+    $colStmt = $pdo->prepare('SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = ? AND table_name = ? AND column_name = ?');
+
+    $colStmt->execute([$schema, 'feedback_messages', 'admin_reply']);
+    if ((int)$colStmt->fetchColumn() === 0) {
+        $pdo->exec('ALTER TABLE feedback_messages ADD COLUMN admin_reply TEXT DEFAULT NULL AFTER message');
+    }
+}
+
 function app_health_check(): array
 {
     try {
@@ -14,7 +24,7 @@ function app_health_check(): array
     }
 
     try {
-        $required = ['roles', 'users', 'categories', 'products', 'orders', 'reviews'];
+        $required = ['roles', 'users', 'categories', 'products', 'orders', 'reviews', 'feedback_messages'];
         $schema = $pdo->query('SELECT DATABASE()')->fetchColumn();
         if (!$schema) {
             return [
@@ -33,6 +43,8 @@ function app_health_check(): array
                 ];
             }
         }
+
+        ensure_optional_columns($pdo, $schema);
 
         return ['ok' => true, 'message' => 'OK'];
     } catch (PDOException $e) {
