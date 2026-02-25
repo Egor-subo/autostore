@@ -3,6 +3,7 @@ require __DIR__ . '/bootstrap.php';
 require_auth();
 
 $user = current_user();
+$maxFeedbackLength = 1500;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -16,13 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect_to('feedback.php');
     }
 
-    if ($name && filter_var($email, FILTER_VALIDATE_EMAIL) && $message) {
+    if (!$name || !filter_var($email, FILTER_VALIDATE_EMAIL) || $message === '') {
+        set_flash('error', 'Проверьте корректность заполнения полей.');
+    } elseif (mb_strlen($message) > $maxFeedbackLength) {
+        set_flash('error', 'Сообщение слишком длинное. Максимум 1500 символов.');
+    } else {
         $q = db()->prepare('INSERT INTO feedback_messages (user_id, name, email, message) VALUES (?, ?, ?, ?)');
         $q->execute([$user['id'], $name, $email, $message]);
         set_flash('success', 'Спасибо! Ваше обращение отправлено. Номер обращения появится ниже.');
         refresh_captcha();
-    } else {
-        set_flash('error', 'Проверьте корректность заполнения полей.');
     }
 
     redirect_to('feedback.php');
@@ -46,7 +49,7 @@ include __DIR__ . '/../includes/header.php';
     <form method="post" class="row g-3">
         <div class="col-md-6"><label class="form-label">Имя</label><input name="name" class="form-control" required value="<?= e($user['login']) ?>"></div>
         <div class="col-md-6"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required value="<?= e($user['email']) ?>"></div>
-        <div class="col-12"><label class="form-label">Сообщение</label><textarea name="message" class="form-control" rows="5" placeholder="Опишите ваш вопрос подробно" required></textarea></div>
+        <div class="col-12"><label class="form-label">Сообщение</label><textarea name="message" class="form-control" rows="5" placeholder="Опишите ваш вопрос подробно" maxlength="1500" required></textarea><div class="form-text">Максимум 1500 символов.</div></div>
         <div class="col-md-6"><label class="form-label">Капча: <?= e(captcha_question()) ?></label><input name="captcha" class="form-control" required></div>
         <div class="col-12"><button class="btn btn-primary">Отправить</button></div>
     </form>
