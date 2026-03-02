@@ -16,6 +16,7 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   birth_date DATE NOT NULL,
   role_id INT NOT NULL,
+  is_blocked TINYINT(1) NOT NULL DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (role_id) REFERENCES roles(id)
 );

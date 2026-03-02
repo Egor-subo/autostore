@@ -17,6 +17,11 @@ function current_user(): ?array
         $stmt = db()->prepare('SELECT u.*, r.name as role_name FROM users u JOIN roles r ON r.id = u.role_id WHERE u.id = ?');
         $stmt->execute([$_SESSION['user_id']]);
         $user = $stmt->fetch() ?: null;
+
+        if ($user && (int)($user['is_blocked'] ?? 0) === 1) {
+            unset($_SESSION['user_id']);
+            $user = null;
+        }
     } catch (PDOException $e) {
         return null;
     }

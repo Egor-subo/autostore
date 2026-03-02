@@ -10,6 +10,11 @@ function ensure_optional_columns(PDO $pdo, string $schema): void
     if ((int)$colStmt->fetchColumn() === 0) {
         $pdo->exec('ALTER TABLE feedback_messages ADD COLUMN admin_reply TEXT DEFAULT NULL AFTER message');
     }
+
+    $colStmt->execute([$schema, 'users', 'is_blocked']);
+    if ((int)$colStmt->fetchColumn() === 0) {
+        $pdo->exec('ALTER TABLE users ADD COLUMN is_blocked TINYINT(1) NOT NULL DEFAULT 0 AFTER role_id');
+    }
 }
 
 function app_health_check(): array

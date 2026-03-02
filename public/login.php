@@ -15,10 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
-            $_SESSION['user_id'] = $user['id'];
-            redirect_to('index.php');
+            if ((int)($user['is_blocked'] ?? 0) === 1) {
+                $errors[] = 'Ваш аккаунт заблокирован администратором.';
+            } else {
+                $_SESSION['user_id'] = $user['id'];
+                redirect_to('index.php');
+            }
+        } else {
+            $errors[] = 'Неверные данные для входа.';
         }
-        $errors[] = 'Неверные данные для входа.';
     }
     refresh_captcha();
 } else {

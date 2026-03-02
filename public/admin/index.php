@@ -12,6 +12,7 @@ include __DIR__ . '/../../includes/header.php';
 <h2>Админ-панель</h2>
 <div class="row g-3 mb-4"><?php foreach($stats as $k=>$v): ?><div class="col-md-3"><div class="card"><div class="card-body"><small><?= e($k) ?></small><h3><?= (int)$v ?></h3></div></div></div><?php endforeach; ?></div>
 <div class="list-group">
+    <a class="list-group-item" href="<?= e(url('admin/users.php')) ?>">Пользователи (добавить / изменить / блок / удалить)</a>
     <a class="list-group-item" href="<?= e(url('admin/products.php')) ?>">Управление товарами</a>
     <a class="list-group-item" href="<?= e(url('admin/categories.php')) ?>">Категории</a>
     <a class="list-group-item" href="<?= e(url('admin/orders.php')) ?>">Заказы и статусы</a>
