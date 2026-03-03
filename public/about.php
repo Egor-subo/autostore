@@ -8,4 +8,9 @@
     <div class="col-md-4"><div class="page-section h-100"><h5>Почему выбирают нас</h5><ul><li>Проверенные поставщики</li><li>Удобная корзина и статусы заказов</li><li>Поддержка и обратная связь</li></ul></div></div>
     <div class="col-md-4"><div class="page-section h-100"><h5>Контакты</h5><p>Телефон: +7 (999) 123-45-67<br>Email: support@autostore.local<br>График: Пн–Сб 09:00–20:00</p></div></div>
 </div>
+<div class="page-section mt-3">
+    <h5>Учебные HTTP-ошибки</h5>
+    <p class="mb-2">Для практики можно открыть страницу демонстрации кодов 404, 301 и 302.</p>
+    <a class="btn btn-outline-primary" href="<?= e(url('http-status.php')) ?>">Открыть демо HTTP-статусов</a>
+</div>
 <?php include __DIR__ . '/../includes/footer.php'; ?>
